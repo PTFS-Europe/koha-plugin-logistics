@@ -1,0 +1,41 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha: Kitchen Sink Plugin: Example Tool</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body>
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">Logistics</a>
+            </li>
+        </ol>
+    </nav>
+
+    <div id="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+                    <h3>Koha: Logistics</h3>
+
+                </main>
+            </div>
+
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    <img src="[% PLUGIN_PATH %]/logo.png" />
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    [% INCLUDE 'intranet-bottom.inc' %]
