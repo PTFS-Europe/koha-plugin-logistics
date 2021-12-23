@@ -1,0 +1,236 @@
+---
+/logistics/groups:
+  get:
+    x-mojo-to: Logistics::Groups#list
+    operationId: listLogisticsGroups
+    tags:
+      - logistics
+    summary: List logistics groups
+    produces:
+      - application/json
+    parameters:
+      match:
+        name: _match
+        in: query
+        required: false
+        description: Matching criteria
+        type: string
+        enum:
+          - contains
+          - exact
+          - starts_with
+          - ends_with
+      order_by:
+        name: _order_by
+        in: query
+        required: false
+        description: Sorting criteria
+        type: array
+        collectionFormat: csv
+        items:
+          type: string
+      page:
+        name: _page
+        in: query
+        required: false
+        description: Page number, for paginated object listing
+        type: integer
+      per_page:
+        name: _per_page
+        in: query
+        required: false
+        description: Page size, for paginated object listing
+        type: integer
+      q_body:
+        name: query
+        in: body
+        required: false
+        description: Query filter sent through request's body
+        schema:
+          type:
+            - object
+            - array
+      q_param:
+        name: q
+        in: query
+        required: false
+        description: Query filter sent as a request parameter
+        type: string
+      q_header:
+        name: x-koha-query
+        in: header
+        required: false
+        description: Query filter sent as a request header
+        type: string
+    responses:
+      "200":
+        description: A list of logistics groups
+        schema:
+          type: array
+          items:
+            $ref: ../definitions.yaml#/group
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  post:
+    x-mojo-to: Logistics::Groups#add
+    operationId: addLogisticsGroup
+    tags:
+      - logistics
+    summary: Add group
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new hold
+        required: true
+        schema:
+          $ref: ../definitions.yaml#/group
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: LogisticsGroup added
+        schema:
+          $ref: ../definitions.yaml#/group
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        parameters: manage_logistics
+"/logistics/groups/{group_id}":
+  get:
+    x-mojo-to: Logistics::Groups#get
+    operationId: getLogisticsGroup
+    tags:
+      - logistics
+    summary: Get group
+    parameters:
+      - $ref: ../parameters.yaml#/group_id_pp
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A group
+        schema:
+          $ref: ../definitions.yaml#/group
+      "404":
+        description: LogisticsGroup not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  put:
+    x-mojo-to: Logistics::Groups#update
+    operationId: updateLogisticsGroup
+    tags:
+      - logistics
+    summary: Update group
+    parameters:
+      - $ref: ../parameters.yaml#/group_id_pp
+      - name: body
+        in: body
+        description: A group object
+        required: true
+        schema:
+          $ref: ../definitions.yaml#/group
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A group
+        schema:
+          $ref: ../definitions.yaml#/group
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: LogisticsGroup not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        parameters: manage_logistics
+  delete:
+    x-mojo-to: Logistics::Groups#delete
+    operationId: deleteLogisticsGroup
+    tags:
+      - logistics
+    summary: Delete group
+    parameters:
+      - $ref: ../parameters.yaml#/group_id_pp
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: LogisticsGroup deleted
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: LogisticsGroup not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        parameters: manage_logistics
