@@ -107,7 +107,7 @@ sub tool {
         $self->$view;
     }
     else {
-        my $template = $self->get_template( { file => 'tool.tt' } );
+        my $template = $self->get_template( { file => 'tt/tool.tt' } );
         my $groups = Koha::Logistics::Groups->new();
         $template->param( no_op_set => 1 );
         $self->output_html( $template->output );
