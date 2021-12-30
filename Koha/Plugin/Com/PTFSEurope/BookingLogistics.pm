@@ -57,7 +57,7 @@ BEGIN {
     Koha::Database->schema( { new => 1 } );
 }
 
-use Mojo::JSON qw(decode_json);
+use JSON::Validator;
 
 ## Koha libraries
 use C4::Context;
@@ -108,7 +108,7 @@ sub tool {
     }
     else {
         my $template = $self->get_template( { file => 'tool.tt' } );
-        my $groups = Koha::Logistics::Groups;
+        my $groups = Koha::Logistics::Groups->new();
         $template->param( no_op_set => 1 );
         $self->output_html( $template->output );
     }
@@ -122,8 +122,11 @@ sub api_namespace {
 sub api_routes {
     my ($self) = @_;
 
-    my $spec_str = $self->mbf_read('openapi.json');
-    my $spec     = decode_json($spec_str);
+    my $spec_str = $self->mbf_read('openapi.yaml');
+    my $path = $self->bundle_path . "/openapi.yaml";
+    my $jv = JSON::Validator->new;
+    $jv->schema("file://$path");
+    my $spec = $jv->bundle;
 
     return $spec;
 }

@@ -1,4 +1,4 @@
-package Koha::REST::V1::Logistics::Groups;
+package Koha::Plugin::Com::PTFSEurope::BookingLogistics::REST::V1::Logistics::Groups;
 
 # This file is part of Koha.
 #
@@ -58,7 +58,7 @@ sub get {
 
     return try {
         my $logistics_group =
-          Koha::Logistics::Groups->find( $c->validation->param('id') );
+          Koha::Logistics::Groups->find( $c->validation->param('group_id') );
         unless ($logistics_group) {
             return $c->render(
                 status  => 404,
@@ -105,7 +105,7 @@ Controller function that handles updating an existing logistics group
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $logistics_group = Koha::Logistics::Groups->find( $c->validation->param('id') );
+    my $logistics_group = Koha::Logistics::Groups->find( $c->validation->param('group_id') );
 
     if ( not defined $logistics_group ) {
         return $c->render(
@@ -133,7 +133,7 @@ Controller function that handles removing an existing logistics group
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $logistics_group = Koha::Logistics::Groups->find( $c->validation->param('id') );
+    my $logistics_group = Koha::Logistics::Groups->find( $c->validation->param('group_id') );
     if ( not defined $logistics_group ) {
         return $c->render(
             status  => 404,
