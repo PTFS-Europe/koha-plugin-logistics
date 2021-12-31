@@ -131,6 +131,23 @@ sub api_routes {
     return $spec;
 }
 
+sub intranet_js {
+    my ($self) = @_;
+    return $self->mbf_read('intranet.js');
+}
+
+sub intranet_head {
+    my ($self) = @_;
+
+    return q|
+      <style>
+        .logistic {
+          background: #3d8eb9;
+        }
+      </style>
+    |;
+}
+
 sub install {
     my ( $self, $args ) = @_;
 

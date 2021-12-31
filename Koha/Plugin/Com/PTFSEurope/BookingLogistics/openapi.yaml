@@ -92,6 +92,9 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
+    x-koha-embed:
+      - group_patrons
+      - patrons
   post:
     x-mojo-to: Com::PTFSEurope::BookingLogistics::REST::V1::Logistics::Groups#add
     operationId: addLogisticsGroup

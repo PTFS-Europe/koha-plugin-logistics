@@ -100,6 +100,19 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-12-23 12:22:17
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JGxNqLsZfnE/GpMIk/DeaA
 
+#__PACKAGE__->many_to_many( patrons => 'koha_plugin_com_ptfseurope_bookinglogistics_group_patrons', 'patron' );
+
+__PACKAGE__->has_many(
+  "group_patrons",
+  "Koha::Schema::Result::KohaPluginComPtfseuropeBookinglogisticsGroupPatron",
+  { "foreign.group_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+#__PACKAGE__->add_relationship( 'patrons', 'Koha::Schema::Result::Borrowers',
+#    $condition, $attrs );
+#);
+
 sub koha_object_class {
     'Koha::Logistics::Group';
 }
