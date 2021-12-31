@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Bookings logistics &rsaquo; Koha</title>
+<title>Logistics &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -19,7 +19,7 @@
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
             </li>
             <li>
-                <a href="#" aria-current="page">Bookings logistics</a>
+                <a href="#" aria-current="page">Logistics</a>
             </li>
         </ol>
     </nav>
@@ -33,18 +33,20 @@
                         <a id="addgroup" class="btn btn-default" data-toggle="modal" data-target="#addGroupModal" ><i class="fa fa-plus"></i> New group</a>
                     </div>
 
-                    <h2>Bookings logistics</h2>
+                    <h1>Logistics</h1>
 
-                        <table id="delivery_groups_table" class="deliver_groups_table" role="grid">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th class="anti-the">Name</th>
-                                    <th>Active days</th>
-                                    <th class="NoSort noExport">Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <h2>Delivery groups</h2>
+
+                    <table id="delivery_groups_table" class="deliver_groups_table" role="grid">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th class="anti-the">Name</th>
+                                <th>Active days</th>
+                                <th class="NoSort noExport">Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </main>
             </div>
 
