@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Koha::Patrons;
 use Koha::Logistics::Groups;
 
 use Try::Tiny qw( catch try );
@@ -83,9 +84,11 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $logistics_group = Koha::Logistics::Group->new_from_api( $c->validation->param('body') );
+        my $logistics_group =
+          Koha::Logistics::Group->new_from_api( $c->validation->param('body') );
         $logistics_group->store;
-        $c->res->headers->location( $c->req->url->to_string . '/' . $logistics_group->id );
+        $c->res->headers->location(
+            $c->req->url->to_string . '/' . $logistics_group->id );
         return $c->render(
             status  => 201,
             openapi => $logistics_group->to_api
@@ -105,7 +108,8 @@ Controller function that handles updating an existing logistics group
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $logistics_group = Koha::Logistics::Groups->find( $c->validation->param('group_id') );
+    my $logistics_group =
+      Koha::Logistics::Groups->find( $c->validation->param('group_id') );
 
     if ( not defined $logistics_group ) {
         return $c->render(
@@ -133,7 +137,8 @@ Controller function that handles removing an existing logistics group
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $logistics_group = Koha::Logistics::Groups->find( $c->validation->param('group_id') );
+    my $logistics_group =
+      Koha::Logistics::Groups->find( $c->validation->param('group_id') );
     if ( not defined $logistics_group ) {
         return $c->render(
             status  => 404,
@@ -150,6 +155,103 @@ sub delete {
     }
     catch {
         $c->unhandled_exception($_);
+    };
+}
+
+=head3 get_patrons
+
+Controller function that handles retrieving group's patrons
+
+=cut
+
+sub get_patrons {
+    my $c = shift->openapi->valid_input or return;
+
+    my $logistics_group =
+      Koha::Logistics::Groups->find( $c->validation->param('group_id') );
+    if ( not defined $logistics_group ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Object not found" }
+        );
+    }
+
+    return try {
+
+        my $patrons_rs = $logistics_group->patrons;
+        my $patrons    = $c->objects->search($patrons_rs);
+        return $c->render(
+            status  => 200,
+            openapi => $patrons
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 assign_patron
+
+Controller function that handles adding patrons to this group
+
+=cut
+
+sub assign_patron {
+    my $c = shift->openapi->valid_input or return;
+
+    my $group_id        = $c->validation->param('group_id');
+    my $logistics_group = Koha::Logistics::Groups->find($group_id);
+    if ( not defined $logistics_group ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Logistics group not found" }
+        );
+    }
+
+    my $patron_id = $c->validation->param('body')->{'patron_id'};
+    my $patron    = Koha::Patrons->find( $patron_id );
+
+    unless ($patron) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found" }
+        );
+    }
+
+    my $position;
+    my $after_id = $c->validation->param('body')->{'after'};
+    if ($after_id) {
+        my $existing_patron = Koha::Logistics::Groups::Patrons->find(
+            { patron_id => $after_id, group_id => $group_id } );
+        unless ($existing_patron) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "After patron not found in group" }
+            );
+        }
+        $position = $existing_patron->position + 1;
+    }
+
+    return try {
+        my $link = $logistics_group->assign_patron( $patron, $position );
+        return $c->render(
+            status  => 201,
+            openapi => $patron
+        );
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Object::DuplicateID' ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error => 'Patron is already in group',
+                    key   => $_->duplicate_id
+                }
+            );
+        }
+        else {
+            $c->unhandled_exception($_);
+        }
     };
 }
 

@@ -166,21 +166,21 @@ Koha::Object Wrapper around DBIx::Class::Ordered.
 sub move_to {
     my ( $self, $position ) = @_;
     return $self->_result->move_to($position)
-        if ( $position le $self->rota->stockrotationstages->count );
+        if ( $position le $self->group->stockrotationstages->count );
     return 0;
 }
 
 =head3 move_to_group
 
-  1|0 = $stage->move_to_group($rota_id, [$position]);
+  1|0 = $stage->move_to_group($group_id, [$position]);
 
 Koha::Object Wrapper around DBIx::Class::Ordered.
 
 =cut
 
 sub move_to_group {
-    my ( $self, $rota_id, $position ) = @_;
-    return $self->_result->move_to_group($rota_id, $position);
+    my ( $self, $group_id, $position ) = @_;
+    return $self->_result->move_to_group($group_id, $position);
 }
 
 =head3 delete
@@ -204,7 +204,7 @@ sub delete {
 =cut
 
 sub _type {
-    return 'KohaPluginComPtfseuropeBookinglogisticsGroupsPatron';
+    return 'KohaPluginComPtfseuropeBookinglogisticsGroupPatron';
 }
 
 sub _relation {
