@@ -180,6 +180,20 @@ sub install {
         ) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     });
 
+    # Patron Quota handling.. should this be it's own plugin rather than being tied to logistics?
+    my $quota_assignments_table = 
+      $self->get_qualified_table_name('quota');
+    C4::Context->dbh->do(qq{
+        CREATE TABLE IF NOT EXISTS $quota_assignments_table (
+            `id` int(11) NOT NULL auto_increment,
+            `patron_id` int(11) NOT NULL,
+            `quota` int(11) NOT NULL,
+            `start` timestamp,
+            `end` timestamp,
+            CONSTRAINT `quota_fk1` FOREIGN KEY (`patron_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    });
+
     return 1;
 }
 
