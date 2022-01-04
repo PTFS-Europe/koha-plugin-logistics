@@ -114,12 +114,29 @@ sub tool {
     }
 }
 
+sub patrons {
+    my ($self, $args) = @_;
+
+    my $cgi = $self->{'cgi'};
+    my $template = $self->get_template( { file => 'tt/patrons.tt' } );
+
+    my $group_id = $cgi->param('group');
+    $template->param( group => $group_id );
+
+    my $patrons = Koha::Logistics::Groups::Patrons->search({ group_id => $group_id });
+    $template->param( existing_patrons => $patrons );
+    
+    $self->output_html( $template->output );
+}
+
 sub dates {
     my ($self, $args) = @_;
 
     my $cgi = $self->{'cgi'};
+    my $group_id = $cgi->param('group');
 
     my $template = $self->get_template( { file => 'tt/dates.tt' } );
+    $template->param( group => $group_id );
     $self->output_html( $template->output );
 }
 

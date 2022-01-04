@@ -17,7 +17,7 @@ Koha::Logistics::Groups::Patron - Koha Logistics Groups Patron Object class
 =cut
 
 sub _type {
-    return 'KohaPluginComPtfseuropeBookinglogisticsGroupsPatron';
+    return 'KohaPluginComPtfseuropeBookinglogisticsGroupPatron';
 }
 
 =head3 object_class

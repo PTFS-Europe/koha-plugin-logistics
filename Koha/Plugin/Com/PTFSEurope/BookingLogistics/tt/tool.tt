@@ -167,12 +167,9 @@
             </form> <!-- /#group_form -->
         </div> <!-- /#deleteGroupModal -->
 
-        [% INCLUDE "$PLUGIN_DIR/tt/inc/modals/add_to_group.inc" %]
-
         [% MACRO jsinclude BLOCK %]
             [% Asset.js("js/tools-menu.js") | $raw %]
             [% INCLUDE 'select2.inc' %]
-            [% INSERT "$PLUGIN_DIR/tt/js/add_to_group.js" %]
             [% INCLUDE 'datatables.inc' %]
             <script>
                 $(document).ready(function() {
@@ -233,7 +230,7 @@
                                     // Edit group
                                     result += '<a class="btn btn-default btn-xs" role="button" data-toggle="modal" data-target="#editGroupModal" data-group_id="'+ encodeURIComponent(row.id) +'" data-group_name="'+encodeURIComponent(row.name)+'" data-group_active="'+encodeURIComponent(row.active)+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                                     // Manage patrons & vans
-                                    result += '<div class="btn-group dropdown" role="group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage <i class="fa fa-caret-down"></i></button><ul class="dropdown-menu pull-right"><li><a data-toggle="modal" data-target="#addPatronToGroupModal" data-group_id="'+ encodeURIComponent(row.id) +'">Patrons</a></li><li><a href="run.pl?class=[% CLASS | uri %]&method=tool&view=dates&group='+ encodeURIComponent(row.id) +'">Vans</a></li></ul></div>';
+                                    result += '<div class="btn-group dropdown" role="group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage <i class="fa fa-caret-down"></i></button><ul class="dropdown-menu pull-right"><li><a href="run.pl?class=[% CLASS | uri %]&method=tool&view=patrons&group='+ encodeURIComponent(row.id) +'">Patrons</a></li><li><a href="run.pl?class=[% CLASS | uri %]&method=tool&view=dates&group='+ encodeURIComponent(row.id) +'">Vans</a></li></ul></div>';
                                     // Delete group
                                     result += '<a class="btn btn-default btn-xs" role="button" data-toggle="modal" data-target="#deleteGroupModal" data-group_id="'+ encodeURIComponent(row.id) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
                                     return result;

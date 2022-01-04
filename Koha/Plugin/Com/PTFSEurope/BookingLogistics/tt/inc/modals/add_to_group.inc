@@ -17,9 +17,6 @@
                                 <label class="required" for="add_patron_to_group_patron_id">Patron: </label>
                                 <select name="add_patron_to_group_patron_id" id="add_patron_to_group_patron_id" required="required">
                                     <option></option>
-                                    [% IF patron %]
-                                    <option value="[% borrowernumber | uri %]" selected="selected">[% patron.firstname | html %] [% patron.surname %] ([% patron.cardnumber %] )</option>
-                                    [% END %]
                                 </select>
                             </li>
                             <li>
