@@ -12,6 +12,20 @@ Koha::Logistics::Groups::Patron - Koha Logistics Groups Patron Object class
 
 =head2 Class Methods
 
+=head3 patron
+
+  my $patron = $stage->patron;
+
+Koha::Patron relationship
+
+=cut
+
+sub patron {
+    my ($self) = @_;
+
+    return &{$self->_relation(qw/ patron Patron /)};
+}
+
 =head3 siblings
 
   my $siblings = $stage->siblings;

@@ -115,17 +115,19 @@ sub tool {
 }
 
 sub patrons {
-    my ($self, $args) = @_;
+    my ( $self, $args ) = @_;
 
-    my $cgi = $self->{'cgi'};
+    my $cgi      = $self->{'cgi'};
     my $template = $self->get_template( { file => 'tt/patrons.tt' } );
 
     my $group_id = $cgi->param('group');
     $template->param( group => $group_id );
 
-    my $patrons = Koha::Logistics::Groups::Patrons->search({ group_id => $group_id });
+    my $patrons =
+      Koha::Logistics::Groups::Patrons->search( { group_id => $group_id },
+        { order_by => 'position' } );
     $template->param( existing_patrons => $patrons );
-    
+
     $self->output_html( $template->output );
 }
 
