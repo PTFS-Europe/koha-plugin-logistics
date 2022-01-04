@@ -114,6 +114,15 @@ sub tool {
     }
 }
 
+sub dates {
+    my ($self, $args) = @_;
+
+    my $cgi = $self->{'cgi'};
+
+    my $template = $self->get_template( { file => 'tt/dates.tt' } );
+    $self->output_html( $template->output );
+}
+
 sub api_namespace {
     my ($self) = $_;
     return 'logistics';
@@ -173,6 +182,9 @@ sub install {
         ) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     });
 
+    # FIXME: This would allow creating vehicle templates and then using a picklist to choose
+    # vehicle assignments.. but it adds a table to maintain and adds additional JOIN's to get
+    # vehicle capacity on a particular date.
     my $vehicle_types_table = $self->get_qualified_table_name('vehicle_types');
     C4::Context->dbh->do(qq{
         CREATE TABLE IF NOT EXISTS $vehicle_types_table (
@@ -189,7 +201,9 @@ sub install {
     C4::Context->dbh->do(qq{
         CREATE TABLE IF NOT EXISTS $vehicles_assignment_table (
             `id` int(11) NOT NULL auto_increment,
-            `vehicle_type_id` int(11) NOT NULL,
+            `date` date NOT NULL,
+            `vehicle_name` varchar(100) NOT NULL,
+            `vehicle_capacity` int(11) NOT NULL,
             `group_id` int(11) NOT NULL,
             PRIMARY KEY (`id`),
             CONSTRAINT `vehicle_assignments_fk1` FOREIGN KEY (`vehicle_type_id`) REFERENCES `$vehicle_types_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
